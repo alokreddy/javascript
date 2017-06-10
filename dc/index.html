@@ -1,0 +1,122 @@
+<!DOCTYPE HTML>
+
+<html lang = "en">
+	<head>
+		<title>Sales Dashboard</title>
+		<meta charset = 'utf-8'>
+		
+		<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.4/dc.min.css" rel="stylesheet"/>
+		<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" rel="stylesheet">
+		<link type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.13/css/jquery.dataTables.min.css" rel="stylesheet">
+		<link type="text/css" src="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet">
+
+		<style>
+			
+			h2 {
+			
+				text-align: center;
+				float: bottom;
+			
+			}
+			
+		</style>
+	
+	</head>
+
+	<body>
+		<div class = "container" id = 'main-container' style = "float:left;">
+			<div class = "container" >
+				<div class = "row">
+					<div class = "col" id = 'barCountryChart' >
+					<h2>Country</h2>
+						<a class ="reset"
+							href="javascript:barCountryChart.filterAll(); dc.redrawAll();"
+							style = "display: none;">
+						reset</a>		
+					</div>
+				</div>
+			</div>
+
+			<div class = "container" >
+				<div class = "row">
+					<div class = "col" id = 'pieOrderTypeChart' >
+					<h2>Order Type</h2>
+						<a class ="reset"
+							href="javascript:pieOrderTypeChart.filterAll(); dc.redrawAll();"
+							style = "display: none;">
+						reset</a>		
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dc/2.1.3/dc.js"></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+
+<script type="text/javascript">
+
+
+d3.csv('data.csv', function(error, data){	
+			if(error) throw error;
+			 console.log(data[0]);
+//Charts
+var barCountryChart = dc.barChart("#barCountryChart"),
+	pieOrderTypeChart = dc.pieChart("#pieOrderTypeChart");
+
+var xf = crossfilter(data);
+
+var countryDim = xf.dimension(function(d) {return d['Retailer_country'];}),
+	orderTypeDim = xf.dimension(function(d) {return d['Order_method_type']});
+
+//Country Bar Chart
+barCountryChart
+	.width(1440)
+	.height(480)
+	.margins({top: 20, right: 10, bottom: 130, left: 90})
+	.x(d3.scale.ordinal())
+	.xUnits(dc.units.ordinal)
+	.elasticX(true)
+	.elasticY(true)
+	.colors('#FFD700')
+	.brushOn(true)
+//	.xAxisLabel('Career Level')
+//	.yAxisLabel('Emp Count')
+	.dimension(countryDim)
+	.group(countryDim.group());
+	/*.renderlet(function(chart) {
+          // rotate x-axis labels
+          chart.selectAll('g.x text')
+          .attr('transform', 'translate(-1,90) rotate(270)');
+        });*/
+		
+//Order Pie Chart
+pieOrderTypeChart
+	.width(320)
+	.height(320)
+    .slicesCap(7)
+    .innerRadius(80)
+    .dimension(orderTypeDim)
+    .group(orderTypeDim.group())
+    .legend(dc.legend().x(400).y(0).gap(5))
+	.renderLabel(true)
+	.on('pretransition', function(chart) {
+        chart.selectAll('text.pie-slice').text(function(d) {
+            return [dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2*Math.PI) * 100) + '%'].join('\r\n');
+        })
+    });
+		
+	//initialize other charts
+	dc.renderAll();
+
+	
+});
+</script>
+
+</body>
+
+
+</html>
