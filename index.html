@@ -30,11 +30,29 @@
 				</div>
 			</div>
 
-			<div class = "container" >
+			<div class = "container-fluid" >
 				<div class = "row">
-					<div class = "col" id = 'pieOrderTypeChart' >
-						<h3>Order Type<a class ="reset"
+					<div class = "col-3" id = 'pieOrderTypeChart' >
+						<h3>Order Method<a class ="reset"
 							href="javascript:pieOrderTypeChart.filterAll(); dc.redrawAll();"
+							style = "display: none;">
+						reset</a></h3>		
+					</div>
+					<div class = "col-3" id = 'pieRetailerTypeChart' >
+						<h3>Retailer Type<a class ="reset"
+							href="javascript:pieRetailerTypeChart.filterAll(); dc.redrawAll();"
+							style = "display: none;">
+						reset</a></h3>		
+					</div>
+					<div class = "col-3" id = 'pieProductLineChart' >
+						<h3>Product Line<a class ="reset"
+							href="javascript:pieProductLineChart.filterAll(); dc.redrawAll();"
+							style = "display: none;">
+						reset</a></h3>		
+					</div>
+					<div class = "col-3" id = 'pieQuarterChart' >
+						<h3>Quarter<a class ="reset"
+							href="javascript:pieQuarterChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
@@ -58,11 +76,17 @@ d3.csv('data.csv', function(error, data){
 //Charts
 	barCountryChart = dc.barChart("#barCountryChart");
 	pieOrderTypeChart = dc.pieChart("#pieOrderTypeChart");
+	pieRetailerTypeChart = dc.pieChart("#pieRetailerTypeChart");
+	pieProductLineChart = dc.pieChart("#pieProductLineChart");
+	pieQuarterChart = dc.pieChart("#pieQuarterChart");
 
 var xf = crossfilter(data);
 
 var countryDim = xf.dimension(function(d) {return d['Retailer_country'];}),
-	orderTypeDim = xf.dimension(function(d) {return d['Order_method_type']});
+	orderTypeDim = xf.dimension(function(d) {return d['Order_method_type'];}),
+	retailerTypeDim = xf.dimension(function(d) {return d['Retailer_type'];}),
+	productLineDim = xf.dimension(function(d) {return d['Product_line'];}),
+	quarterDim = xf.dimension(function(d) {return d['Quarter'];});
 
 //Country Bar Chart
 barCountryChart
@@ -100,7 +124,41 @@ pieOrderTypeChart
             return [dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2*Math.PI) * 100) + '%'].join('\r\n');
         })
     });*/
-		
+
+//Retailer Type Pie Chart
+pieRetailerTypeChart
+	.width(320)
+	.height(320)
+    .slicesCap(8)
+    .innerRadius(80)
+    .dimension(retailerTypeDim)
+    .group(retailerTypeDim.group())
+    .legend(dc.legend().x(400).y(0).gap(5))
+	.renderLabel(true);
+
+//Product Line Pie Chart
+pieProductLineChart
+	.width(320)
+	.height(320)
+    .slicesCap(8)
+    .innerRadius(80)
+    .dimension(productLineDim)
+    .group(productLineDim.group())
+    .legend(dc.legend().x(400).y(0).gap(5))
+	.renderLabel(true);
+
+//Quarter Pie Chart
+pieQuarterChart
+	.width(320)
+	.height(320)
+    .slicesCap(12)
+    .innerRadius(80)
+    .dimension(quarterDim)
+    .group(quarterDim.group())
+    .legend(dc.legend().x(400).y(0).gap(5))
+	.renderLabel(true);
+
+	
 	//initialize other charts
 	dc.renderAll();
 
