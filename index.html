@@ -11,6 +11,10 @@
 		<link type="text/css" src="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" rel="stylesheet">
 
 		<style>
+		
+		.col-lg-3{
+					margin-right: 5px;  
+				}
 						
 		</style>
 	
@@ -30,27 +34,27 @@
 				</div>
 			</div>
 
-			<div class = "container-fluid" >
-				<div class = "row">
-					<div class = "col-3" id = 'pieOrderTypeChart' >
+			<div class = "container-fluid" style = "float:center;">
+				<div class = "row" "col-lg-12">
+					<div class = "col-lg-6" id = 'pieOrderTypeChart' >
 						<h3>Order Method<a class ="reset"
 							href="javascript:pieOrderTypeChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-3" id = 'pieRetailerTypeChart' >
+					<div class = "col-lg-6" id = 'pieRetailerTypeChart' >
 						<h3>Retailer Type<a class ="reset"
 							href="javascript:pieRetailerTypeChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-3" id = 'pieProductLineChart' >
+					<div class = "col-lg-6" id = 'pieProductLineChart' >
 						<h3>Product Line<a class ="reset"
 							href="javascript:pieProductLineChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-3" id = 'pieQuarterChart' >
+					<div class = "col-lg-6" id = 'pieQuarterChart' >
 						<h3>Quarter<a class ="reset"
 							href="javascript:pieQuarterChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
@@ -108,16 +112,17 @@ barCountryChart
           chart.selectAll('g.x text')
           .attr('transform', 'translate(-1,90) rotate(270)');
         });*/
-		
+
+var pieSize = 280;		
 //Order Pie Chart
 pieOrderTypeChart
-	.width(320)
-	.height(320)
+	.width(pieSize)
+	.height(pieSize)
     .slicesCap(7)
     .innerRadius(80)
     .dimension(orderTypeDim)
     .group(orderTypeDim.group())
-    .legend(dc.legend().x(400).y(0).gap(5))
+//    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 /*	.on('pretransition', function(chart) {
         chart.selectAll('text.pie-slice').text(function(d) {
@@ -127,35 +132,35 @@ pieOrderTypeChart
 
 //Retailer Type Pie Chart
 pieRetailerTypeChart
-	.width(320)
-	.height(320)
+	.width(pieSize)
+	.height(pieSize)
     .slicesCap(8)
     .innerRadius(80)
     .dimension(retailerTypeDim)
     .group(retailerTypeDim.group())
-    .legend(dc.legend().x(400).y(0).gap(5))
+//    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
 //Product Line Pie Chart
 pieProductLineChart
-	.width(320)
-	.height(320)
+	.width(pieSize)
+	.height(pieSize)
     .slicesCap(8)
     .innerRadius(80)
     .dimension(productLineDim)
     .group(productLineDim.group())
-    .legend(dc.legend().x(400).y(0).gap(5))
+//    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
 //Quarter Pie Chart
 pieQuarterChart
-	.width(320)
-	.height(320)
+	.width(pieSize)
+	.height(pieSize)
     .slicesCap(12)
     .innerRadius(80)
     .dimension(quarterDim)
     .group(quarterDim.group())
-    .legend(dc.legend().x(400).y(0).gap(5))
+//    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
 	
