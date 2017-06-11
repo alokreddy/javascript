@@ -35,26 +35,26 @@
 			</div>
 
 			<div class = "container-fluid" style = "float:center;">
-				<div class = "row" "col-lg-12">
-					<div class = "col-lg-6" id = 'pieOrderTypeChart' >
+				<div class = "row align-items-start">
+					<div class = "col-sm-3" id = 'pieOrderTypeChart' >
 						<h3>Order Method<a class ="reset"
 							href="javascript:pieOrderTypeChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-lg-6" id = 'pieRetailerTypeChart' >
+					<div class = "col-sm-3" id = 'pieRetailerTypeChart' >
 						<h3>Retailer Type<a class ="reset"
 							href="javascript:pieRetailerTypeChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-lg-6" id = 'pieProductLineChart' >
+					<div class = "col-sm-3" id = 'pieProductLineChart' >
 						<h3>Product Line<a class ="reset"
 							href="javascript:pieProductLineChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-lg-6" id = 'pieQuarterChart' >
+					<div class = "col-sm-3" id = 'pieQuarterChart' >
 						<h3>Quarter<a class ="reset"
 							href="javascript:pieQuarterChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
@@ -74,9 +74,16 @@
 <script type="text/javascript">
 
 
+var timeFormat = d3.time.format('%Y-%m-%d');
+
 d3.csv('data.csv', function(error, data){	
 			if(error) throw error;
 			 console.log(data[0]);
+			 
+			 data.forEach(function(x){
+				x['Order_Date'] = timeFormat.parse(x['Order_Date']);
+				x['Ship_Date'] = timeFormat.parse(x['Ship_Date']);
+			 })
 //Charts
 	barCountryChart = dc.barChart("#barCountryChart");
 	pieOrderTypeChart = dc.pieChart("#pieOrderTypeChart");
@@ -86,11 +93,11 @@ d3.csv('data.csv', function(error, data){
 
 var xf = crossfilter(data);
 
-var countryDim = xf.dimension(function(d) {return d['Retailer_country'];}),
-	orderTypeDim = xf.dimension(function(d) {return d['Order_method_type'];}),
-	retailerTypeDim = xf.dimension(function(d) {return d['Retailer_type'];}),
-	productLineDim = xf.dimension(function(d) {return d['Product_line'];}),
-	quarterDim = xf.dimension(function(d) {return d['Quarter'];});
+var countryDim = xf.dimension(function(d) {return d['Province'];}),
+	orderTypeDim = xf.dimension(function(d) {return d['Order_Priority'];}),
+	retailerTypeDim = xf.dimension(function(d) {return d['Customer_Segment'];}),
+	productLineDim = xf.dimension(function(d) {return d['Product_Category'];}),
+	quarterDim = xf.dimension(function(d) {return d['Product_Name'];});
 
 //Country Bar Chart
 barCountryChart
@@ -113,7 +120,7 @@ barCountryChart
           .attr('transform', 'translate(-1,90) rotate(270)');
         });*/
 
-var pieSize = 280;		
+var pieSize = 256;		
 //Order Pie Chart
 pieOrderTypeChart
 	.width(pieSize)
