@@ -24,10 +24,10 @@
 		<div class = "container" id = 'main-container' style = "float:left;">
 			<div class = "container" >
 				<div class = "row">
-					<div class = "col" id = 'barCountryChart' >
-					<h3>Country
+					<div class = "col" id = 'barProvinceChart' >
+					<h3>Province
 						<a class ="reset"
-							href="javascript:barCountryChart.filterAll(); dc.redrawAll();"
+							href="javascript:barProvinceChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
@@ -36,27 +36,27 @@
 
 			<div class = "container-fluid" style = "float:center;">
 				<div class = "row align-items-start">
-					<div class = "col-sm-3" id = 'pieOrderTypeChart' >
-						<h3>Order Method<a class ="reset"
-							href="javascript:pieOrderTypeChart.filterAll(); dc.redrawAll();"
+					<div class = "col-sm-3" id = 'pieOrderPriorityChart' >
+						<h3>Order Priority<a class ="reset"
+							href="javascript:pieOrderPriorityChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-sm-3" id = 'pieRetailerTypeChart' >
-						<h3>Retailer Type<a class ="reset"
-							href="javascript:pieRetailerTypeChart.filterAll(); dc.redrawAll();"
+					<div class = "col-sm-3" id = 'pieCustomerSegmentChart' >
+						<h3>Customer Segment<a class ="reset"
+							href="javascript:pieCustomerSegmentChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-sm-3" id = 'pieProductLineChart' >
-						<h3>Product Line<a class ="reset"
-							href="javascript:pieProductLineChart.filterAll(); dc.redrawAll();"
+					<div class = "col-sm-3" id = 'pieProductCategoryChart' >
+						<h3>Product Category<a class ="reset"
+							href="javascript:pieProductCategoryChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-sm-3" id = 'pieQuarterChart' >
-						<h3>Quarter<a class ="reset"
-							href="javascript:pieQuarterChart.filterAll(); dc.redrawAll();"
+					<div class = "col-sm-3" id = 'pieProductNameChart' >
+						<h3>Product<a class ="reset"
+							href="javascript:pieProductNameChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
@@ -85,22 +85,22 @@ d3.csv('data.csv', function(error, data){
 				x['Ship_Date'] = timeFormat.parse(x['Ship_Date']);
 			 })
 //Charts
-	barCountryChart = dc.barChart("#barCountryChart");
-	pieOrderTypeChart = dc.pieChart("#pieOrderTypeChart");
-	pieRetailerTypeChart = dc.pieChart("#pieRetailerTypeChart");
-	pieProductLineChart = dc.pieChart("#pieProductLineChart");
-	pieQuarterChart = dc.pieChart("#pieQuarterChart");
+	barProvinceChart = dc.barChart("#barProvinceChart");
+	pieOrderPriorityChart = dc.pieChart("#pieOrderPriorityChart");
+	pieCustomerSegmentChart = dc.pieChart("#pieCustomerSegmentChart");
+	pieProductCategoryChart = dc.pieChart("#pieProductCategoryChart");
+	pieProductNameChart = dc.pieChart("#pieProductNameChart");
 
 var xf = crossfilter(data);
 
-var countryDim = xf.dimension(function(d) {return d['Province'];}),
-	orderTypeDim = xf.dimension(function(d) {return d['Order_Priority'];}),
-	retailerTypeDim = xf.dimension(function(d) {return d['Customer_Segment'];}),
-	productLineDim = xf.dimension(function(d) {return d['Product_Category'];}),
-	quarterDim = xf.dimension(function(d) {return d['Product_Name'];});
+var provinceDim = xf.dimension(function(d) {return d['Province'];}),
+	orderPriorityDim = xf.dimension(function(d) {return d['Order_Priority'];}),
+	customerSegmentDim = xf.dimension(function(d) {return d['Customer_Segment'];}),
+	productCategoryDim = xf.dimension(function(d) {return d['Product_Category'];}),
+	productNameDim = xf.dimension(function(d) {return d['Product_Name'];});
 
 //Country Bar Chart
-barCountryChart
+barProvinceChart
 	.width(1440)
 	.height(480)
 	.margins({top: 20, right: 10, bottom: 130, left: 90})
@@ -112,23 +112,24 @@ barCountryChart
 	.brushOn(true)
 //	.xAxisLabel('Career Level')
 //	.yAxisLabel('Emp Count')
-	.dimension(countryDim)
-	.group(countryDim.group());
+	.dimension(provinceDim)
+	.group(provinceDim.group());
 	/*.renderlet(function(chart) {
           // rotate x-axis labels
           chart.selectAll('g.x text')
           .attr('transform', 'translate(-1,90) rotate(270)');
         });*/
 
-var pieSize = 256;		
-//Order Pie Chart
-pieOrderTypeChart
+var pieSize = 256;
+		
+//Order Priority Pie Chart
+pieOrderPriorityChart
 	.width(pieSize)
 	.height(pieSize)
     .slicesCap(7)
     .innerRadius(80)
-    .dimension(orderTypeDim)
-    .group(orderTypeDim.group())
+    .dimension(orderPriorityDim)
+    .group(orderPriorityDim.group())
 //    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 /*	.on('pretransition', function(chart) {
@@ -137,36 +138,36 @@ pieOrderTypeChart
         })
     });*/
 
-//Retailer Type Pie Chart
-pieRetailerTypeChart
+//Customer Segment Pie Chart
+pieCustomerSegmentChart
 	.width(pieSize)
 	.height(pieSize)
     .slicesCap(8)
     .innerRadius(80)
-    .dimension(retailerTypeDim)
-    .group(retailerTypeDim.group())
+    .dimension(customerSegmentDim)
+    .group(customerSegmentDim.group())
 //    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
-//Product Line Pie Chart
-pieProductLineChart
+//Product Category Pie Chart
+pieProductCategoryChart
 	.width(pieSize)
 	.height(pieSize)
     .slicesCap(8)
     .innerRadius(80)
-    .dimension(productLineDim)
-    .group(productLineDim.group())
+    .dimension(productCategoryDim)
+    .group(productCategoryDim.group())
 //    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
-//Quarter Pie Chart
-pieQuarterChart
+//Product Pie Chart
+pieProductNameChart
 	.width(pieSize)
 	.height(pieSize)
     .slicesCap(12)
     .innerRadius(80)
-    .dimension(quarterDim)
-    .group(quarterDim.group())
+    .dimension(productNameDim)
+    .group(productNameDim.group())
 //    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
