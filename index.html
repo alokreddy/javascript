@@ -54,9 +54,9 @@
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
-					<div class = "col-sm-3" id = 'pieProductNameChart' >
-						<h3>Product<a class ="reset"
-							href="javascript:pieProductNameChart.filterAll(); dc.redrawAll();"
+					<div class = "col-sm-3" id = 'pieShipModeChart' >
+						<h3>Ship Mode<a class ="reset"
+							href="javascript:pieShipModeChart.filterAll(); dc.redrawAll();"
 							style = "display: none;">
 						reset</a></h3>		
 					</div>
@@ -89,7 +89,7 @@ d3.csv('data.csv', function(error, data){
 	pieOrderPriorityChart = dc.pieChart("#pieOrderPriorityChart");
 	pieCustomerSegmentChart = dc.pieChart("#pieCustomerSegmentChart");
 	pieProductCategoryChart = dc.pieChart("#pieProductCategoryChart");
-	pieProductNameChart = dc.pieChart("#pieProductNameChart");
+	pieShipModeChart = dc.pieChart("#pieShipModeChart");
 
 var xf = crossfilter(data);
 
@@ -97,7 +97,7 @@ var provinceDim = xf.dimension(function(d) {return d['Province'];}),
 	orderPriorityDim = xf.dimension(function(d) {return d['Order_Priority'];}),
 	customerSegmentDim = xf.dimension(function(d) {return d['Customer_Segment'];}),
 	productCategoryDim = xf.dimension(function(d) {return d['Product_Category'];}),
-	productNameDim = xf.dimension(function(d) {return d['Product_Name'];});
+	shipModeDim = xf.dimension(function(d) {return d['Ship_Mode'];});
 
 //Country Bar Chart
 barProvinceChart
@@ -161,13 +161,13 @@ pieProductCategoryChart
 	.renderLabel(true);
 
 //Product Pie Chart
-pieProductNameChart
+pieShipModeChart
 	.width(pieSize)
 	.height(pieSize)
     .slicesCap(12)
     .innerRadius(80)
-    .dimension(productNameDim)
-    .group(productNameDim.group())
+    .dimension(shipModeDim)
+    .group(shipModeDim.group())
 //    .legend(dc.legend().x(400).y(0).gap(5))
 	.renderLabel(true);
 
