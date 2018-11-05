@@ -1,12 +1,98 @@
-var moveChart = dc.lineChart('#daily-area-chart');
+var moveChart = dc.compositeChart('#daily-area-chart');
 var volumeChart = dc.barChart('#daily-brush-chart');
 var regOverTimeChart = dc.pieChart('#reg-over-time-chart');
 var quarterChart = dc.pieChart('#quarter-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
 
+//Width and height of map
+var width_spendmap = 960;
+var height_spendmap = 500;
+
+// D3 Projection
+var projection = d3.geoAlbersUsa()
+				   .translate([width_spendmap/2, height_spendmap/2])    // translate to center of screen
+				   .scale([1000]);          // scale things down so see entire US
+        
+// Define path generator
+var path = d3.geoPath()               // path generator that will convert GeoJSON to SVG paths
+		  	 .projection(projection);  // tell path generator to use albersUsa projection
+
+		
+// Define linear scale for output
+var color = d3.scaleLinear()
+			  .range(["rgb(213,222,217)","rgb(69,173,168)","rgb(84,36,55)","rgb(217,91,67)"]);
+
+
+//Create SVG element and append map to the SVG
+var svg = d3.select("#usamap")
+			.append("svg")
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 960 500");
+        
+// Append Div for tooltip to SVG
+var div = d3.select("body")
+		    .append("div")   
+    		.attr("class", "tooltip")               
+    		.style("opacity", 0);
+
+
+// Load GeoJSON data and merge with states data
+d3.json("us-states.json", function(json) {
+
+
+    // Bind the data to the SVG and create one path per GeoJSON feature
+svg.selectAll("path")
+	.data(json.features)
+	.enter()
+	.append("path")
+	.attr("d", path)
+	.style("stroke", "#fff")
+	.style("stroke-width", "1")
+	.style("fill", "#b3e5fc");
+		 
+// Map the cities I have lived in!
+d3.csv("headcount.csv", function(data) {
+console.log(data);    
+svg.selectAll("circle")
+	.data(data)
+	.enter()
+	.append("circle")
+	.attr("cx", function(d) {
+		return projection([d.lon, d.lat])[0];
+	})
+	.attr("cy", function(d) {
+		return projection([d.lon, d.lat])[1];
+	})
+	.attr("r", function(d) {
+		return Math.sqrt(d.headcount) * 4;
+	})
+		.style("fill", "#009688 ")//"rgb(217,91,67)")	
+		.style("opacity", 0.85)	
+    
+//using HTML instead of text to enable tooltip formatting!
+	.on("mouseover", function(d) {      
+    	div.transition()        
+      	   .duration(200)      
+           .style("opacity", .9);      
+           div.html("Location: " + d.place + "<br/>" +"Head Count: " + d.headcount)
+           .style("left", (d3.event.pageX) + "px")     
+           .style("top", (d3.event.pageY - 28) + "px");    
+	})   
+
+    // fade out tooltip on mouse out               
+    .on("mouseout", function(d) {       
+        div.transition()        
+           .duration(500)      
+           .style("opacity", 0);   
+    });
+});  
+        
+});
+
+
 d3.json('spend.json').then(function (spend) {
 
-    console.log(spend);
+    //console.log(spend);
 
     var spend = spend.data.spendbydaterange;
     var dateFormatSpecifier = '%Y-%m-%d';
@@ -48,17 +134,19 @@ d3.json('spend.json').then(function (spend) {
 
     //regular bill rate
     var regbillRateGroup = moveDays.group().reduceSum(function (d) {
-        return Math.abs(d.regular_billrate);
+        return Math.abs(+d.regular_billrate);
     });
 
     //overtime bill rate
     var overtimebillRateGroup = moveDays.group().reduceSum(function (d) {
-        return Math.abs(d.overtime_billrate);
+        return  Math.abs(+d.overtime_billrate);
     });
+    
+    console.log(overtimebillRateGroup.top(Infinity));
 
     //total bill rate
     var totbillRateGroup = moveDays.group().reduceSum(function (d) {
-        return Math.abs(d.total_billrate);
+        return Math.abs(+d.total_billrate);
     });
 
     // count of the number dates
@@ -82,7 +170,7 @@ d3.json('spend.json').then(function (spend) {
 
     //sum of the total bill rate by quarters
     var quarterGroup = quarter.group().reduceSum(function (d) {
-        return d.total_billrate;
+        return +d.total_billrate;
     });
 
     // Counts per weekday
@@ -93,15 +181,35 @@ d3.json('spend.json').then(function (spend) {
     });
 
     // group by weekday
-    var dayOfWeekGroup = dayOfWeek.group().reduceSum(function(d) {
-        return d.total_billrate;
+    var dayOfWeekGroup = dayOfWeek.group().reduceSum(function (d) {
+        return +d.total_billrate;
     });
 
-
+    var indexAvgByMonthGroup = moveDays.group().reduce(
+        function (p, v) {
+            ++p.days;
+            p.total += (v.total_billrate );
+            p.avg = Math.round(p.total / p.days);
+            return p;
+        },
+        function (p, v) {
+            --p.days;
+            p.total -= (v.total_billrate);
+            p.avg = p.days ? Math.round(p.total / p.days) : 0;
+            return p;
+        },
+        function () {
+            return {
+                days: 0,
+                total: 0,
+                avg: 0
+            };
+        }
+    );
 
     //#### Stacked Area Chart
 
-    moveChart /* dc.lineChart('#monthly-move-chart', 'chartGroup') */
+  /*  moveChart
         .renderArea(true)
         .width(990)
         .height(200)
@@ -115,36 +223,77 @@ d3.json('spend.json').then(function (spend) {
         .dimension(moveDays)
         .mouseZoomable(true)
         .rangeChart(volumeChart) //connecting the brush-chart with area chart
-        .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 07, 31)]))
+        .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 11, 31)]))
         .round(d3.timeMonth.round)
         .xUnits(d3.timeMonths)
         .elasticY(true)
         .renderHorizontalGridLines(true)
-        //##### Legend
 
+        //##### Legend
         // Position the legend relative to the chart origin and specify items' height and separation.
         .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
         .brushOn(false)
         // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
         // legend.
         // The `.valueAccessor` will be used for the base layer
-        .group(overtimebillRateGroup, 'OT Spend')
+        .group(overtimebillRateGroup, 'OverTime Bill Rate')
         .valueAccessor(function (d) {
-            return d.value.avg;
+            return +d.value;
         })
         // Stack additional layers with `.stack`. The first paramenter is a new group.
         // The second parameter is the series name. The third is a value accessor.
-        .stack(regbillRateGroup, 'RT Spend', function (d) {
-            return d.value;
+        .stack(regbillRateGroup, 'Regular Bill Rate', function (d) {
+            return +d.value;
         })
-        // Title can be called by any stack layer.
-        .title(function (d) {
-            var value = d.value.avg ? d.value.avg : d.value;
-            if (isNaN(value)) {
-                value = 0;
-            }
-            return dateFormat(d.key) + '\n' + numberFormat(value);
-        });
+        .stack(overtimebillRateGroup, 'Total Bill Rate', function (d) {
+            return +d.value;
+        })
+
+           // Title can be called by any stack layer.
+           .title(function (d) {
+               var value = d.value ? d.value : d.value;
+               if (isNaN(value)) {
+                   value = 0;
+               }
+               return dateFormat(d.key) + '\n' + numberFormat(value);
+           })
+    ;*/
+    
+    moveChart.width(990)
+                .height(300)
+                .transitionDuration(1000)
+                .margins({top: 30, right: 50, bottom: 25, left: 60})
+                .dimension(moveDays)
+                .mouseZoomable(true)
+                .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 11, 31)]))
+                .round(d3.timeMonth.round)
+                .xUnits(d3.timeMonths)
+                .elasticY(true)
+                .renderHorizontalGridLines(true)
+                .legend(dc.legend().x(70).y(10).itemHeight(13).gap(5))
+                .brushOn(false)
+                .compose([
+                    dc.lineChart(moveChart)
+                            .group(regbillRateGroup, "Regular BR")
+                            .valueAccessor(function (d) {
+                                return d.value;
+                            }),
+                    dc.lineChart(moveChart)
+                            .group(overtimebillRateGroup, "Overtime BR")
+                            .valueAccessor(function (d) {
+                                return (d.value);
+                            })
+                            .title(function (d) {
+                                var value = d.value.avg ? d.value.avg : d.value;
+                                if (isNaN(value)) value = 0;
+                                return dateFormat(d.key) + "\n" + numberFormat(value);
+                            })
+                            .ordinalColors(["orange"])
+                            .useRightYAxis(true)
+                ])
+                .yAxisLabel("Regular Billrate")
+                .rightYAxisLabel("Over-Time Billrate")
+                .renderHorizontalGridLines(true);
 
     //#### Range Chart
 
@@ -162,11 +311,11 @@ d3.json('spend.json').then(function (spend) {
         .group(volumeByDaysGroup)
         .centerBar(true)
         .gap(1)
-        .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 07, 31)]))
+        .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 11, 31)]))
         .round(d3.timeDay.round)
         .alwaysUseRounding(true)
         .xUnits(d3.timeDay)
-        .yAxis().ticks(0);//tickFormat(function(v) { return ""; });;
+        .yAxis().ticks(0); //tickFormat(function(v) { return ""; });;
 
     //pie chart
     quarterChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
@@ -238,7 +387,10 @@ d3.json('spend.json').then(function (spend) {
         .radius(80)
         .innerRadius(40)
         .dimension(moveDays)
-        .group(otrtGroup)
+        .group(otrtGroup);
+    
+    
+
 
     //render
     dc.renderAll();
