@@ -1,8 +1,12 @@
-var moveChart = dc.lineChart('#daily-area-chart');
-var volumeChart = dc.barChart('#daily-brush-chart');
-var regOverTimeChart = dc.pieChart('#reg-over-time-chart');
+var moveChart = dc.lineChart('#area-chart');
+var volumeChart = dc.barChart('#brush-chart');
 var quarterChart = dc.pieChart('#quarter-chart');
+var categoryChart = dc.pieChart('#category-chart');
 var dayOfWeekChart = dc.rowChart('#day-of-week-chart');
+var locationChart = dc.bubbleChart('#location');
+var supplierChart = dc.bubbleChart('#supplier');
+
+var numberFormat = d3.format(',.0f');
 
 //Width and height of map
 var width_spendmap = 960;
@@ -37,7 +41,7 @@ var div = d3.select("body")
 
 
 // Load GeoJSON data and merge with states data
-d3.json("us-states.json", function (json) {
+d3.json('us-states.json').then(function (json) {
 
 
     // Bind the data to the SVG and create one path per GeoJSON feature
@@ -50,59 +54,20 @@ d3.json("us-states.json", function (json) {
         .style("stroke-width", "1")
         .style("fill", "#b3e5fc");
 
-    // Map the cities I have lived in!
-    d3.csv("headcount.csv", function (data) {
-        console.log(data);
-        svg.selectAll("circle")
-            .data(data)
-            .enter()
-            .append("circle")
-            .attr("cx", function (d) {
-                return projection([d.lon, d.lat])[0];
-            })
-            .attr("cy", function (d) {
-                return projection([d.lon, d.lat])[1];
-            })
-            .attr("r", function (d) {
-                return Math.sqrt(d.headcount) * 4;
-            })
-            .style("fill", "#009688 ") //"rgb(217,91,67)")	
-            .style("opacity", 0.85)
-
-            //using HTML instead of text to enable tooltip formatting!
-            .on("mouseover", function (d) {
-                div.transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                div.html("Location: " + d.place + "<br/>" + "Head Count: " + d.headcount)
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
-            })
-
-            // fade out tooltip on mouse out               
-            .on("mouseout", function (d) {
-                div.transition()
-                    .duration(500)
-                    .style("opacity", 0);
-            });
-    });
-
 });
 
 
 d3.json('spend.json').then(function (spend) {
-
     //console.log(spend);
-
     var spend = spend.data.spendbydaterange;
     var dateFormatSpecifier = '%Y-%m-%d';
     var dateFormat = d3.timeFormat(dateFormatSpecifier);
     var dateFormatParser = d3.timeParse(dateFormatSpecifier);
-    var numberFormat = d3.format('.2f');
 
     spend.forEach(function (d) {
         d.dd = dateFormatParser(d.spend_date);
         d.month = d3.timeMonth(d.dd); // pre-calculate month for better performance
+        d.week = d3.timeWeek(d.dd); // pre-calculate week for better performance
         d.overtime_billrate = +d.overtime_billrate; // coerce to number
         d.overtime_hours = +d.overtime_hours;
         d.regular_billrate = +d.regular_billrate;
@@ -112,8 +77,6 @@ d3.json('spend.json').then(function (spend) {
     });
 
     //### Create Crossfilter Dimensions and Groups
-
-    //See the [crossfilter API](https://github.com/square/crossfilter/wiki/API-Reference) for reference.
     var ndx = crossfilter(spend);
     var all = ndx.groupAll();
 
@@ -132,26 +95,39 @@ d3.json('spend.json').then(function (spend) {
         return d.dd;
     });
 
+    // Dimension by month
+    var moveMonths = ndx.dimension(function (d) {
+        return d.month;
+    });
+
+    // Dimension by week
+    var moveWeeks = ndx.dimension(function (d) {
+        return d.week;
+    });
+
     //regular bill rate
-    var regbillRateGroup = moveDays.group().reduceSum(function (d) {
+    var regbillRateGroup = moveWeeks.group().reduceSum(function (d) {
         return Math.abs(+d.regular_billrate);
     });
 
     //overtime bill rate
-    var overtimebillRateGroup = moveDays.group().reduceSum(function (d) {
+    var overtimebillRateGroup = moveWeeks.group().reduceSum(function (d) {
         return Math.abs(+d.overtime_billrate);
     });
 
-    console.log(overtimebillRateGroup.top(Infinity));
-
     //total bill rate
-    var totbillRateGroup = moveDays.group().reduceSum(function (d) {
+    var totbillRateGroup = moveWeeks.group().reduceSum(function (d) {
         return Math.abs(+d.total_billrate);
     });
 
     // count of the number dates
     var volumeByDaysGroup = moveDays.group().reduceCount(function (d) {
         return d.dd;
+    });
+
+    // count of the number weeks
+    var volumeByWeeksGroup = moveWeeks.group().reduceCount(function (d) {
+        return d.week;
     });
 
     // Summarize volume by quarter
@@ -172,6 +148,14 @@ d3.json('spend.json').then(function (spend) {
     var quarterGroup = quarter.group().reduceSum(function (d) {
         return +d.total_billrate;
     });
+    
+    var category = ndx.dimension(function(d) {
+        return d['job_category']
+    });
+    
+    var categoryGroup = category.group().reduceSum(function(d) {
+        return +d.total_billrate;
+    });
 
     // Counts per weekday
     var dayOfWeek = ndx.dimension(function (d) {
@@ -185,82 +169,61 @@ d3.json('spend.json').then(function (spend) {
         return +d.total_billrate;
     });
 
-    var indexAvgByMonthGroup = moveDays.group().reduce(
+    var location = ndx.dimension(function (d) {
+        return d["location"];
+    });
+
+    var statsByLocation = location.group().reduce(
         function (p, v) {
-            ++p.days;
-            p.total += (v.total_billrate);
-            p.avg = Math.round(p.total / p.days);
+            p.spend += +v["total_billrate"];
+            p.count++;
             return p;
         },
         function (p, v) {
-            --p.days;
-            p.total -= (v.total_billrate);
-            p.avg = p.days ? Math.round(p.total / p.days) : 0;
+            p.spend -= +v["total_billrate"];
+            if (p.spend < 0.001) p.spend = 0; // do some clean up
+            p.count--;
             return p;
         },
         function () {
             return {
-                days: 0,
-                total: 0,
-                avg: 0
-            };
+                spend: 0,
+                count: 0
+            }
+        }
+    );
+
+
+    var suppliers = ndx.dimension(function (d) {
+        return d["supplier"];
+    });
+
+    var statsBySuppliers = suppliers.group().reduce(
+        function (p, v) {
+            p.spend += +v["total_billrate"];
+            p.count++;
+            return p;
+        },
+        function (p, v) {
+            p.spend -= +v["total_billrate"];
+            if (p.spend < 0.001) p.spend = 0; // do some clean up
+            p.count--;
+            return p;
+        },
+        function () {
+            return {
+                spend: 0,
+                count: 0
+            }
         }
     );
 
     //#### Stacked Area Chart
 
-      moveChart 
-          .renderArea(true)
-          .width(990)
-          .height(200)
-          .transitionDuration(1000)
-          .margins({
-              top: 30,
-              right: 50,
-              bottom: 25,
-              left: 40
-          })
-          .dimension(moveDays)
-          .mouseZoomable(true)
-          .rangeChart(volumeChart) //connecting the brush-chart with area chart
-          .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 11, 31)]))
-          .round(d3.timeMonth.round)
-          .xUnits(d3.timeMonths)
-          .elasticY(true)
-          .renderHorizontalGridLines(true)
-
-          //##### Legend
-          // Position the legend relative to the chart origin and specify items' height and separation.
-          .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
-          .brushOn(false)
-          // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
-          // legend.
-          // The `.valueAccessor` will be used for the base layer
-          .group(overtimebillRateGroup, 'OverTime Bill Rate')
-          .valueAccessor(function (d) {
-              return +d.value;
-          })
-          // Stack additional layers with `.stack`. The first paramenter is a new group.
-          // The second parameter is the series name. The third is a value accessor.
-          .stack(regbillRateGroup, 'Regular Bill Rate', function (d) {
-              return +d.value;
-          })
-          .stack(overtimebillRateGroup, 'Total Bill Rate', function (d) {
-              return +d.value;
-          })
-
-             // Title can be called by any stack layer.
-             .title(function (d) {
-                 var value = d.value ? d.value : d.value;
-                 if (isNaN(value)) {
-                     value = 0;
-                 }
-                 return dateFormat(d.key) + '\n' + numberFormat(value);
-             })
-      ;
-
-    /* moveChart.width(990)
-        .height(300)
+    moveChart
+        .renderArea(true)
+        .width(990)
+        .height(200)
         .transitionDuration(1000)
         .margins({
             top: 30,
@@ -268,42 +231,47 @@ d3.json('spend.json').then(function (spend) {
             bottom: 25,
             left: 60
         })
-        .dimension(moveDays)
+        .dimension(moveWeeks)
         .mouseZoomable(true)
+        .rangeChart(volumeChart) //connecting the brush-chart with area chart
         .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 11, 31)]))
-        .round(d3.timeMonth.round)
-        .xUnits(d3.timeMonths)
+        .round(d3.timeWeeks.round)
+        .xUnits(d3.timeWeeks)
+        .y(d3.scalePow().exponent(0.6).domain([0, 1000, 100000]).range([0, 30]))
         .elasticY(true)
         .renderHorizontalGridLines(true)
-        .legend(dc.legend().x(70).y(10).itemHeight(13).gap(5))
+
+        //##### Legend
+        // Position the legend relative to the chart origin and specify items' height and separation.
+        .legend(dc.legend().x(800).y(10).itemHeight(13).gap(5))
         .brushOn(false)
-        .compose([
-                    dc.lineChart(moveChart)
-                        .renderArea(true)
-                        .rangeChart(volumeChart)
-                            .group(regbillRateGroup, "Regular BR")
-                            .valueAccessor(function (d) {
-                return d.value;
-            }),
-                    dc.lineChart(moveChart)
-                        .renderArea(true)
-                        //.rangeChart(volumeChart)
-                            .group(overtimebillRateGroup, "Overtime BR")
-                            .valueAccessor(function (d) {
-                return (d.value);
-            })
-                            .title(function (d) {
-                var value = d.value.avg ? d.value.avg : d.value;
-                if (isNaN(value)) value = 0;
-                return dateFormat(d.key) + "\n" + numberFormat(value);
-            })
-                            .ordinalColors(["orange"])
-                            .useRightYAxis(true)
-                ])
-        .yAxisLabel("Regular Billrate")
-        .rightYAxisLabel("Over-Time Billrate")
-        .renderHorizontalGridLines(true);
-*/
+        // Add the base layer of the stack with group. The second parameter specifies a series name for use in the
+        // legend.
+        // The `.valueAccessor` will be used for the base layer
+        .group(overtimebillRateGroup, 'OverTime Bill Rate')
+        .valueAccessor(function (d) {
+            return +d.value;
+        })
+        // Stack additional layers with `.stack`. The first paramenter is a new group.
+        // The second parameter is the series name. The third is a value accessor.
+        .stack(regbillRateGroup, 'Regular Bill Rate', function (d) {
+            return +d.value;
+        })
+        .stack(totbillRateGroup, 'Total Bill Rate', function (d) {
+            return +d.value;
+        })
+
+        // Title can be called by any stack layer.
+        .title(function (d) {
+            var value = d.value ? d.value : d.value;
+            if (isNaN(value)) {
+                value = 0;
+            }
+            return dateFormat(d.key) + '\n' + numberFormat(value);
+        });
+    
+    moveChart.yAxis().tickFormat(d3.format('.2s')).ticks(7);
+
     //#### Range Chart
 
     // Since this bar chart is specified as "range chart" for the area chart, its brush extent
@@ -314,21 +282,21 @@ d3.json('spend.json').then(function (spend) {
             top: 0,
             right: 50,
             bottom: 20,
-            left: 40
+            left: 60
         })
-        .dimension(moveDays)
-        .group(volumeByDaysGroup)
+        .dimension(moveWeeks)
+        .group(volumeByWeeksGroup)
         .centerBar(true)
         .gap(1)
         .x(d3.scaleTime().domain([new Date(2018, 1, 1), new Date(2018, 11, 31)]))
-        .round(d3.timeDay.round)
+        .round(d3.timeWeeks.round)
         .alwaysUseRounding(true)
         .xUnits(d3.timeDay)
-        .yAxis().ticks(0); //tickFormat(function(v) { return ""; });;
+        .yAxis().ticks(0); 
 
-    //pie chart
-    quarterChart /* dc.pieChart('#quarter-chart', 'chartGroup') */
-        .width(180)
+    //pie chart by Quarter
+    quarterChart 
+        .width(280)
         .height(180)
         .radius(80)
         .innerRadius(40)
@@ -336,8 +304,8 @@ d3.json('spend.json').then(function (spend) {
         .group(quarterGroup);
 
     //#### Row Chart
-    dayOfWeekChart /* dc.rowChart('#day-of-week-chart', 'chartGroup') */
-        .width(180)
+    dayOfWeekChart
+        .width(480)
         .height(180)
         .margins({
             top: 20,
@@ -354,52 +322,129 @@ d3.json('spend.json').then(function (spend) {
         })
         // Title sets the row text
         .title(function (d) {
-            return d.value;
+            return numberFormat(d.value);
         })
-        .elasticX(true)
-        .xAxis().ticks(4);
+        .elasticX(true);
+    
+    dayOfWeekChart.xAxis().tickFormat(d3.format('.2s')).ticks(7);
 
-    //### Pie Chart for number of RT vs OT
-    function regroup(dim, cols) {
-        var _groupAll = dim.groupAll().reduce(
-            function (p, v) { // add
-                cols.forEach(function (c) {
-                    p[c] += v[c];
-                });
-                return p;
-            },
-            function (p, v) { // remove
-                cols.forEach(function (c) {
-                    p[c] -= v[c];
-                });
-                return p;
-            },
-            function () { // init
-                var p = {};
-                cols.forEach(function (c) {
-                    p[c] = 0;
-                });
-                return p;
-            });
-        return {
-            all: function () {
-                // or _.pairs, anything to turn the object into an array
-                return d3.map(_groupAll.value()).entries();
-            }
-        };
-    }
-    var otrtGroup = regroup(moveDays, ['regular_billrate', 'overtime_billrate']);
-
-    regOverTimeChart
-        .width(180)
+    //donut chart by category
+    categoryChart 
+        .width(280)
         .height(180)
         .radius(80)
         .innerRadius(40)
-        .dimension(moveDays)
-        .group(otrtGroup);
+        .dimension(category)
+        .group(categoryGroup);
 
+    //category bubble chart starts
+    var xRange = [-10, d3.max(statsByLocation.all(), function (d) {
+            return d.value.spend + d.value.spend * 2;
+        })],
+        yRange = [-10, d3.max(statsByLocation.all(), function (d) {
+            return d.value.count + d.value.spend * 2;
+        })];
+    
+    locationChart
+        .width(990)
+        .height(320)
+        .margins({
+            top: 30,
+            right: 90,
+            bottom: 50,
+            left: 50
+        })
+        .dimension(location)
+        .group(statsByLocation)
+        .colors(d3.scaleOrdinal(d3.schemeCategory10))
+        .keyAccessor(function (p) {
+            return p.value.spend;
+        })
+        .valueAccessor(function (p) {
+            return p.value.count;
+        })
+        .radiusValueAccessor(function (p) {
+            return p.value.spend;
+        })
+        .x(d3.scaleLinear().domain(xRange))
+        .r(d3.scaleLinear().domain(yRange))
+        .minRadiusWithLabel(15)
+        .elasticY(true)
+        .yAxisPadding(1000)
+        .elasticX(true)
+        .xAxisPadding(2000)
+        .maxBubbleRelativeSize(0.07)
+        .renderHorizontalGridLines(true)
+        .renderVerticalGridLines(true)
+        .xAxisLabel('Total Billrate (Sum)')
+        .yAxisLabel('# of records')
+        .renderLabel(true)
+        .renderTitle(true)
+        .title(function (p) {
+            return p.key +
+                "\n" +
+                "Total Billrate: " + numberFormat(p.value.spend) + "\n" +
+                "# of records: " + numberFormat(p.value.count);
+        })
+        .on('renderlet', function (chart, filter) {
+            chart.svg().select(".chart-body").attr("clip-path", null);
+        });
 
+    //category bubble chart ends
 
+    //supplier bubble chart starts
+    var xRange = [-10, d3.max(statsBySuppliers.all(), function (d) {
+            return d.value.spend + d.value.spend * 2;
+        })],
+        yRange = [-10, d3.max(statsBySuppliers.all(), function (d) {
+            return d.value.count + d.value.spend * 2;
+        })];
+    
+    supplierChart
+        .width(990)
+        .height(320)
+        .margins({
+            top: 30,
+            right: 90,
+            bottom: 50,
+            left: 50
+        })
+        .dimension(suppliers)
+        .group(statsBySuppliers)
+        .colors(d3.scaleOrdinal(d3.schemeCategory10))
+        .keyAccessor(function (p) {
+            return p.value.spend;
+        })
+        .valueAccessor(function (p) {
+            return p.value.count;
+        })
+        .radiusValueAccessor(function (p) {
+            return p.value.spend;
+        })
+        .x(d3.scaleLinear().domain(xRange))
+        .r(d3.scaleLinear().domain(yRange))
+        .minRadiusWithLabel(15)
+        .elasticY(true)
+        .yAxisPadding(100)
+        .elasticX(true)
+        .xAxisPadding(200)
+        .maxBubbleRelativeSize(0.07)
+        .renderHorizontalGridLines(true)
+        .renderVerticalGridLines(true)
+        .xAxisLabel('Total Billrate (Sum)')
+        .yAxisLabel('# of records')
+        .renderLabel(true)
+        .renderTitle(true)
+        .title(function (p) {
+            return p.key +
+                "\n" +
+                "Total Billrate: " + numberFormat(p.value.spend) + "\n" +
+                "# of records: " + numberFormat(p.value.count);
+        })
+        .on('renderlet', function (chart, filter) {
+            chart.svg().select(".chart-body").attr("clip-path", null);
+        });
+    //supplier bubble chart ends
 
     //render
     dc.renderAll();
