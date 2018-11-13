@@ -6,15 +6,10 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.8/dc.min.css" />
-    <link rel="stylesheet" href="spend.css" />
 
     <style>
         #monthly-volume-chart g.y {
             display: none;
-        }
-        #logo {
-            margin-right: 2em;
-            margin-top: 2em;
         }
     </style>
 </head>
@@ -41,6 +36,7 @@
         <div class="clearfix"></div>
 
         <div class="row">
+            
             <div id="quarter-chart">
                 <h6>Quarters</h6>
                 <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
@@ -48,21 +44,19 @@
                 <div class="clearfix"></div>
             </div>
 
-            <div id="day-of-week-chart">
-                <h6>Day of Week</h6>
-                <a class="reset" href="javascript:dayOfWeekChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-
-                <div class="clearfix"></div>
+            <div class="row">
+                <h6>By Site</h6>
+                <div id="location"></div>
             </div>
 
             <div id="category-chart">
                 <h6>Category</h6>
-                <a class="reset" href="javascript:quarterChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
-
+                <a class="reset" href="javascript:categoryChart.filterAll();dc.redrawAll();" style="display: none;">reset</a>
                 <div class="clearfix"></div>
             </div>
-
+            
         </div>
+
         <div class="row">
             <div id="usamap"></div>
         </div>
@@ -72,19 +66,13 @@
             <div id="supplier"></div>
         </div>
 
-        <div class="row">
-            <h6>By Site</h6>
-            <div id="location"></div>
-        </div>
-
-
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.7.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crossfilter/1.3.12/crossfilter.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dc/3.0.8/dc.min.js"></script>
 
-    <script type="text/javascript" src="spend.js"></script>
+    <script type="text/javascript" src="spend_billrate.js"></script>
 
 </body>
 
