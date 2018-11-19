@@ -1,0 +1,176 @@
+{
+  "name": "root",
+  "children": [
+    {
+      "name": "Clerical\\/Administrative",
+      "children": [
+        {
+          "name": "Northwest Hospital",
+          "children": [
+            {
+              "name": "Bolder Healthcare",
+              "children": [
+                {
+                  "name": "Active",
+                  "size": 4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sinai Hospital",
+          "children": [
+            {
+              "name": "Kforce",
+              "children": [
+                {
+                  "name": "Active",
+                  "size": 11
+                },
+                {
+                  "name": "Terminated",
+                  "size": 6
+                }
+              ]
+            },
+            {
+              "name": "Robert Half",
+              "children": [
+                {
+                  "name": "Active",
+                  "size": 12
+                },
+                {
+                  "name": "Terminated",
+                  "size": 10
+                }
+              ]
+            },
+            {
+              "name": "Roth Staffing",
+              "children": [
+                {
+                  "name": "Active",
+                  "size": 3
+                }
+              ]
+            },
+            {
+              "name": "Symphony Placements",
+              "children": [
+                {
+                  "name": "Active",
+                  "size": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Light Industrial",
+      "children": [
+        {
+          "name": "Sinai Hospital",
+          "children": [
+            {
+              "name": "Priority One Staffing Services",
+              "children": [
+                {
+                  "name": "Terminated",
+                  "size": 26
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Professional",
+      "children": [
+        {
+          "name": "Carroll Hospital\\r\\n",
+          "children": [
+            {
+              "name": "Aerotek",
+              "children": [
+                {
+                  "name": "Terminated",
+                  "size": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sinai Hospital",
+          "children": [
+            {
+              "name": "Aerotek",
+              "children": [
+                {
+                  "name": "Terminated",
+                  "size": 7
+                }
+              ]
+            },
+            {
+              "name": "Robert Half",
+              "children": [
+                {
+                  "name": "Terminated",
+                  "size": 4
+                }
+              ]
+            },
+            {
+              "name": "Roth Staffing",
+              "children": [
+                {
+                  "name": "Active",
+                  "size": 3
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Skilled Labor",
+      "children": [
+        {
+          "name": "Levindale Hebrew Geriatric Center and Hospital",
+          "children": [
+            {
+              "name": "Aerotek",
+              "children": [
+                {
+                  "name": "Terminated",
+                  "size": 4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Sinai Hospital",
+          "children": [
+            {
+              "name": "Aerotek",
+              "children": [
+                {
+                  "name": "Terminated",
+                  "size": 4
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

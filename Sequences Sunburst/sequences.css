@@ -1,0 +1,132 @@
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: #fff;
+  width: 960px;
+  height: 700px;
+  margin-top: 10px;
+}
+
+#main {
+  float: left;
+  width: 750px;
+}
+
+#sidebar {
+  float: right;
+  width: 100px;
+}
+
+#sequence-container {
+  width: auto;
+  height: 80px;
+}
+
+#legend {
+  padding: 10px 0 0 3px;
+}
+
+#sequence text,
+#legend text {
+  font-weight: 600;
+  fill: #fff;
+}
+
+#chart {
+  position: relative;
+}
+
+#chart path {
+  stroke: #fff;
+}
+
+#explanation {
+  position: absolute;
+  top: 260px;
+  left: 305px;
+  width: 140px;
+  text-align: center;
+  color: #666;
+  z-index: -1;
+}
+
+#percentage {
+  display: inline-block;
+  font-size: 2.5em;
+  position: relative;
+}
+
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  /* aspect ratio */
+  vertical-align: top;
+  overflow: hidden;
+}
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+
+.breadcrumbs-container {
+  list-style: none;
+  overflow: hidden;
+  font: 18px Helvetica, Arial, Sans-Serif;
+}
+
+.breadcrumbs-container li {
+  float: left;
+}
+
+.breadcrumbs-container li a {
+  color: white;
+  text-decoration: none;
+  font-size: 10px;
+  padding: 15px 0 10px 55px;
+  position: relative;
+  display: block;
+  float: left;
+}
+
+.breadcrumbs-container li a:after {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid;
+  border-left-color: inherit;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  left: 100%;
+  z-index: 2;
+}
+
+.breadcrumbs-container li a:before {
+  content: " ";
+  display: block;
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid white;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  margin-left: 1px;
+  left: 100%;
+  z-index: 1;
+}
+
+.breadcrumbs-container li:first-child a {
+  padding-left: 10px;
+}
