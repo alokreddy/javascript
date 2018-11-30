@@ -1,0 +1,123 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.9/c3.min.css" />
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.9/c3.min.js"></script>
+</head>
+
+<body>
+<div class="row">
+    <div id="bar"></div>
+    <div id="donut"></div>
+</div>
+    <script>
+        var data = {
+            "status": "success",
+            "data": {
+                "type": "headcountSpendByCategory",
+                "value": [{
+                        "total_regular_hours": "1734.00",
+                        "total_overtime_hours": "24.00",
+                        "total_hours": "1758.00",
+                        "regular_payrate": "51.00",
+                        "total_regular_payrate": "1729.00",
+                        "overtime_payrate": "51.00",
+                        "total_payrate": "1753.00",
+                        "headcount": 52,
+                        "category": "Admins and Customer Service"
+                    },
+                    {
+                        "total_regular_hours": "47.00",
+                        "total_overtime_hours": "0.00",
+                        "total_hours": "47.00",
+                        "regular_payrate": "40.00",
+                        "total_regular_payrate": "940.00",
+                        "overtime_payrate": "60.00",
+                        "total_payrate": "940.00",
+                        "headcount": 2,
+                        "category": "Claims"
+                    },
+                    {
+                        "total_regular_hours": "19121.25",
+                        "total_overtime_hours": "322.75",
+                        "total_hours": "19444.00",
+                        "regular_payrate": "10922.50",
+                        "total_regular_payrate": "350929.44",
+                        "overtime_payrate": "13315.50",
+                        "total_payrate": "362662.54",
+                        "headcount": 536,
+                        "category": "Technology (IT)"
+                    }
+                ]
+            }
+        };
+
+        var chart = c3.generate({
+            size: {
+                height: 300,
+                width: 500
+            },
+            bindto: '#bar',
+            data: {
+                json: data.data.value,
+                keys: {
+                    x: 'category',
+                    value: ['headcount'],
+                },
+                type: 'bar'
+            },
+            bar: {
+                width: {
+                    ratio: 0.5
+                }
+            },
+            axis: {
+                x: {
+                    type: 'category'
+                }
+            }
+        });
+
+        setTimeout(function() {
+            chart.resize({
+                height: 300,
+                width: 500
+            })
+        }, 1000);
+        
+        
+        var chart_donut = c3.generate({
+                        size: {
+                height: 300,
+                width: 500
+            },
+            bindto: '#donut',
+
+    data: {
+                json: data.data.value,
+                keys: {
+                    x: 'category',
+                    value: ['overtime_payrate', 'regular_payrate'],
+                },
+        type : 'donut'/*,
+        onclick: function (d, i) { console.log("onclick", d, i); },
+        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+    */},
+    donut: {
+        title: "RT vs OT"
+    }
+});
+
+        
+        
+    </script>
+
+    </div>
+
+
+</body>
+
+</html>
