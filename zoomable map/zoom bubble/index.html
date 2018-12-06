@@ -66,7 +66,7 @@
                 .on('click', clicked);
 
             var tooltip = svg.append('g')
-                .attr('class', tooltip);
+                .attr('class', 'tooltip');
 
             tooltip.append('text')
                 .attr('x', 15)
@@ -86,13 +86,28 @@
                     y = centroid[1];
                     k = 4;
                     centered = d;
+                    
                 } else {
                     x = width / 2;
                     y = height / 2;
                     k = 1;
                     centered = null;
                 }
+                
+/*
+                // Show tooltip
+                div_choropleth.transition()    
+                .duration(200)    
+                .style("opacity", .9);  
 
+                // Write staff on tooltip
+                div_choropleth.html("Location: " + d.place + "<br/>" + "Head Count: " + d.headcount)
+                // Place the tooltip
+                div_choropleth.style("left", (d3.mouse(this)[0]) + "px")   
+                .style("top", (d3.mouse(this)[1]) + "px");                    
+*/
+                            
+                
                 map.selectAll('path')
                     .classed('active', centered && function(d) {
                         return d === centered;
