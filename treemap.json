@@ -1,0 +1,692 @@
+{
+  "name": "Category-Spend: Year, Quarter, Month drill-down",
+  "children": [
+    {
+      "name": 2017,
+      "children": [
+        {
+          "name": "Q1",
+          "children": [
+            {
+              "name": "Apr",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 678194
+                },
+                {
+                  "name": "Other",
+                  "size": 10000
+                },
+                {
+                  "name": "Technology",
+                  "size": 424584
+                }
+              ]
+            },
+            {
+              "name": "Jun",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 524425
+                },
+                {
+                  "name": "Other",
+                  "size": 343142
+                },
+                {
+                  "name": "Technology",
+                  "size": 566474
+                }
+              ]
+            },
+            {
+              "name": "May",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 391405
+                },
+                {
+                  "name": "Other",
+                  "size": 501542
+                },
+                {
+                  "name": "Technology",
+                  "size": 534319
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q2",
+          "children": [
+            {
+              "name": "Aug",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 482783
+                },
+                {
+                  "name": "Other",
+                  "size": 368735
+                },
+                {
+                  "name": "Technology",
+                  "size": 545895
+                }
+              ]
+            },
+            {
+              "name": "Jul",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 477629
+                },
+                {
+                  "name": "Other",
+                  "size": 412681
+                },
+                {
+                  "name": "Technology",
+                  "size": 437917
+                }
+              ]
+            },
+            {
+              "name": "Sep",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 621758
+                },
+                {
+                  "name": "Other",
+                  "size": 697302
+                },
+                {
+                  "name": "Technology",
+                  "size": 727123
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q3",
+          "children": [
+            {
+              "name": "Dec",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 451742
+                },
+                {
+                  "name": "Other",
+                  "size": 499274
+                },
+                {
+                  "name": "Technology",
+                  "size": 500242
+                }
+              ]
+            },
+            {
+              "name": "Nov",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 438677
+                },
+                {
+                  "name": "Other",
+                  "size": 562700
+                },
+                {
+                  "name": "Technology",
+                  "size": 574137
+                }
+              ]
+            },
+            {
+              "name": "Oct",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 480717
+                },
+                {
+                  "name": "Other",
+                  "size": 548253
+                },
+                {
+                  "name": "Technology",
+                  "size": 621579
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q4",
+          "children": [
+            {
+              "name": "Feb",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 432699
+                },
+                {
+                  "name": "Other",
+                  "size": 547967
+                },
+                {
+                  "name": "Technology",
+                  "size": 406739
+                }
+              ]
+            },
+            {
+              "name": "Jan",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 427895
+                },
+                {
+                  "name": "Other",
+                  "size": 490251
+                },
+                {
+                  "name": "Technology",
+                  "size": 444542
+                }
+              ]
+            },
+            {
+              "name": "Mar",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 355141
+                },
+                {
+                  "name": "Other",
+                  "size": 514639
+                },
+                {
+                  "name": "Technology",
+                  "size": 500073
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": 2018,
+      "children": [
+        {
+          "name": "Q1",
+          "children": [
+            {
+              "name": "Apr",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 438684
+                },
+                {
+                  "name": "Other",
+                  "size": 662742
+                },
+                {
+                  "name": "Technology",
+                  "size": 607539
+                }
+              ]
+            },
+            {
+              "name": "Jun",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 486886
+                },
+                {
+                  "name": "Other",
+                  "size": 541003
+                },
+                {
+                  "name": "Technology",
+                  "size": 408492
+                }
+              ]
+            },
+            {
+              "name": "May",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 290100
+                },
+                {
+                  "name": "Other",
+                  "size": 566672
+                },
+                {
+                  "name": "Technology",
+                  "size": 466319
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q2",
+          "children": [
+            {
+              "name": "Aug",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 479934
+                },
+                {
+                  "name": "Other",
+                  "size": 453776
+                },
+                {
+                  "name": "Technology",
+                  "size": 470758
+                }
+              ]
+            },
+            {
+              "name": "Jul",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 503810
+                },
+                {
+                  "name": "Other",
+                  "size": 609311
+                },
+                {
+                  "name": "Technology",
+                  "size": 666450
+                }
+              ]
+            },
+            {
+              "name": "Sep",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 380166
+                },
+                {
+                  "name": "Other",
+                  "size": 428688
+                },
+                {
+                  "name": "Technology",
+                  "size": 577738
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q3",
+          "children": [
+            {
+              "name": "Dec",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 401952
+                },
+                {
+                  "name": "Other",
+                  "size": 497682
+                },
+                {
+                  "name": "Technology",
+                  "size": 613352
+                }
+              ]
+            },
+            {
+              "name": "Nov",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 457856
+                },
+                {
+                  "name": "Other",
+                  "size": 535889
+                },
+                {
+                  "name": "Technology",
+                  "size": 610278
+                }
+              ]
+            },
+            {
+              "name": "Oct",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 526923
+                },
+                {
+                  "name": "Other",
+                  "size": 393783
+                },
+                {
+                  "name": "Technology",
+                  "size": 477860
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q4",
+          "children": [
+            {
+              "name": "Feb",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 444542
+                },
+                {
+                  "name": "Other",
+                  "size": 260903
+                },
+                {
+                  "name": "Technology",
+                  "size": 511401
+                }
+              ]
+            },
+            {
+              "name": "Jan",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 545095
+                },
+                {
+                  "name": "Other",
+                  "size": 572930
+                },
+                {
+                  "name": "Technology",
+                  "size": 442695
+                }
+              ]
+            },
+            {
+              "name": "Mar",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 336642
+                },
+                {
+                  "name": "Other",
+                  "size": 465914
+                },
+                {
+                  "name": "Technology",
+                  "size": 489451
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": 2019,
+      "children": [
+        {
+          "name": "Q1",
+          "children": [
+            {
+              "name": "Apr",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 621912
+                },
+                {
+                  "name": "Other",
+                  "size": 449392
+                },
+                {
+                  "name": "Technology",
+                  "size": 388588
+                }
+              ]
+            },
+            {
+              "name": "Jun",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 475532
+                },
+                {
+                  "name": "Other",
+                  "size": 609115
+                },
+                {
+                  "name": "Technology",
+                  "size": 453777
+                }
+              ]
+            },
+            {
+              "name": "May",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 501126
+                },
+                {
+                  "name": "Other",
+                  "size": 360180
+                },
+                {
+                  "name": "Technology",
+                  "size": 469145
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q2",
+          "children": [
+            {
+              "name": "Aug",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 571029
+                },
+                {
+                  "name": "Other",
+                  "size": 555528
+                },
+                {
+                  "name": "Technology",
+                  "size": 482012
+                }
+              ]
+            },
+            {
+              "name": "Jul",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 477765
+                },
+                {
+                  "name": "Other",
+                  "size": 341438
+                },
+                {
+                  "name": "Technology",
+                  "size": 637388
+                }
+              ]
+            },
+            {
+              "name": "Sep",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 493739
+                },
+                {
+                  "name": "Other",
+                  "size": 595312
+                },
+                {
+                  "name": "Technology",
+                  "size": 492323
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q3",
+          "children": [
+            {
+              "name": "Dec",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 555644
+                },
+                {
+                  "name": "Other",
+                  "size": 696084
+                },
+                {
+                  "name": "Technology",
+                  "size": 395268
+                }
+              ]
+            },
+            {
+              "name": "Nov",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 562977
+                },
+                {
+                  "name": "Other",
+                  "size": 382764
+                },
+                {
+                  "name": "Technology",
+                  "size": 442638
+                }
+              ]
+            },
+            {
+              "name": "Oct",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 481620
+                },
+                {
+                  "name": "Other",
+                  "size": 286644
+                },
+                {
+                  "name": "Technology",
+                  "size": 626676
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Q4",
+          "children": [
+            {
+              "name": "Feb",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 372964
+                },
+                {
+                  "name": "Other",
+                  "size": 489220
+                },
+                {
+                  "name": "Technology",
+                  "size": 351961
+                }
+              ]
+            },
+            {
+              "name": "Jan",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 543646
+                },
+                {
+                  "name": "Other",
+                  "size": 468523
+                },
+                {
+                  "name": "Technology",
+                  "size": 451434
+                }
+              ]
+            },
+            {
+              "name": "Mar",
+              "children": [
+                {
+                  "name": "Administration",
+                  "size": 464484
+                },
+                {
+                  "name": "Other",
+                  "size": 477961
+                },
+                {
+                  "name": "Technology",
+                  "size": 687185
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
