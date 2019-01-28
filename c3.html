@@ -1,0 +1,812 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.9/c3.min.css" />
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.6.9/c3.min.js"></script>
+</head>
+<style>
+    .c3-text {
+        /*transform: translate(-62px, 0);*/
+        fill: #000 !important;
+    }
+</style>
+
+<body>
+    <div class="row">
+        <div id="brushbar1"></div>
+    </div>
+    <script>
+        /* var data = {
+            "status": "success",
+            "data": {
+                "type": "headcountSpendByCategory",
+                "value": [{
+                        "total_regular_hours": "1734.00",
+                        "total_overtime_hours": "24.00",
+                        "total_hours": "1758.00",
+                        "regular_payrate": "51.00",
+                        "total_regular_payrate": "1729.00",
+                        "overtime_payrate": "51.00",
+                        "total_payrate": "1753.00",
+                        "headcount": 52,
+                        "category": "Admins and Customer Service"
+                    },
+                    {
+                        "total_regular_hours": "47.00",
+                        "total_overtime_hours": "0.00",
+                        "total_hours": "47.00",
+                        "regular_payrate": "40.00",
+                        "total_regular_payrate": "940.00",
+                        "overtime_payrate": "60.00",
+                        "total_payrate": "940.00",
+                        "headcount": 2,
+                        "category": "Claims"
+                    },
+                    {
+                        "total_regular_hours": "19121.25",
+                        "total_overtime_hours": "322.75",
+                        "total_hours": "19444.00",
+                        "regular_payrate": "10922.50",
+                        "total_regular_payrate": "350929.44",
+                        "overtime_payrate": "13315.50",
+                        "total_payrate": "362662.54",
+                        "headcount": 536,
+                        "category": "Technology (IT)"
+                    }
+                ]
+            }
+        };*/
+
+        var data = [{
+                "headcount": "3",
+                "supplier": "AccruePartners",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "4",
+                "supplier": "Alligatorshade",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "22",
+                "supplier": "Alligatorshade",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Alligatorshade",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Alligatorshade",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Artisan",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Betaking",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Blossomshack",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Bluebite",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Bluffoods",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Boarspace",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Brisk Enterprises",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Bull Sports",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "4",
+                "supplier": "Bullaid",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Bullaid",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Cliffstar",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "CoWorx Staffing Services",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "CoWorx Staffing Services",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Cyclolutions",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Davis Companies",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Elecoms",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Elecoms",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "4",
+                "supplier": "Elecoms",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Elecoms",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "14",
+                "supplier": "Elecoms",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Flukords",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Flukords",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Ghostronics",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Gnomesun",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "4",
+                "supplier": "Happy Networks",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Icetime",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Imagine",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "4",
+                "supplier": "Imagine",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Imagine",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Integrity Staffing Solutions",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "JWilliams Staffing",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Keepers Staffing",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Keepers Staffing",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Keepers Staffing",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Leopardking",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Low Tidustries",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Lucent Enterprises",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "28",
+                "supplier": "Lucent Enterprises",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Marbletronics",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Moonlimited",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Motionland",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Nemotronics",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Nymph Coms",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Omegapoly",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "26",
+                "supplier": "Oysterex",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "13",
+                "supplier": "Oysterex",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Oysterex",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Phantasmedia",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "5",
+                "supplier": "Phantomndale",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Phantomnscape",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Priductions",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "30",
+                "supplier": "Remedy Intelligent Staffing",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "9",
+                "supplier": "Remedy Intelligent Staffing",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "6",
+                "supplier": "Remedy Intelligent Staffing",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Remedy Intelligent Staffing",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "12",
+                "supplier": "Remedy Intelligent Staffing",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Ridgeco",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "4",
+                "supplier": "Roth Staffing",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Shrubrews",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Shrubrews",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Shrubrews",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Signalbar",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Smartechnologies",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Smartechnologies",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Smartechnologies",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Smartechnologies",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "SNI Companies",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "5",
+                "supplier": "Spherelight",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Sphinx Solutions",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Spike Corp",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Squidustries",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Squidustries",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Squidustries",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Sunlightning",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Sunlightning",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Sunlightning",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "12",
+                "supplier": "The Hype! Agency",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "12",
+                "supplier": "The Hype! Agency",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "6",
+                "supplier": "The Hype! Agency",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "16",
+                "supplier": "The Hype! Agency",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "6",
+                "supplier": "The Hype! Agency",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Tidustries",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "5",
+                "supplier": "Tidustries",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Tidustries",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Tucan Productions",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Tulip Arts",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Tulip Arts",
+                "tenture_duration_range": "12 - 18 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Tulip Arts",
+                "tenture_duration_range": "18 - 24 Months"
+            },
+            {
+                "headcount": "2",
+                "supplier": "Turtletainment",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Waveex",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Waveex",
+                "tenture_duration_range": "6 - 12 Months"
+            },
+            {
+                "headcount": "19",
+                "supplier": "Webrews",
+                "tenture_duration_range": "0 - 6 Months"
+            },
+            {
+                "headcount": "3",
+                "supplier": "Whirlpoolutions",
+                "tenture_duration_range": "24+ Months"
+            },
+            {
+                "headcount": "1",
+                "supplier": "Workway",
+                "tenture_duration_range": "24+ Months"
+            }
+        ];
+
+        function drawStackedBarChart(dom, data, options, ordinalVar, numericVar) {
+
+            //options.y_axis_tick_format --> to specify y-axis ticks format
+            //options.rotated --> if true output will be a horizontal bar chart
+            //numericVar has to be string with ',' as the seperator for example 'overtime, regulartime, expense'
+
+            var stackedBarChart = c3.generate({
+                size: {
+                    height: 720,
+                    width: 1200
+                },
+                bindto: dom,
+                data: {
+                    x: "x-axis",
+                    json: data,
+                    keys: {
+                        x: "supplier",
+                        value: numericVar.split(',')
+                    },
+                    //groups: [numericVar.split(',')],
+                    type: 'bar'
+                },
+                axis: {
+                    rotated: options.rotated || false,
+                    x: {
+                        label: {
+                            text: ordinalVar.toUpperCase(),
+                            position: options.rotated ? 'outer-middle' : 'outer-center'
+                        },
+                        type: 'category',
+                        tick: {
+                            multiline: true,
+                            multilineMax: 1,
+                        },
+                        height: 50
+                    },
+                    y: {
+                        tick: {
+                            format: options.y_axis_tick_format || '',
+                            count: 5
+                        }
+                    }
+                },
+                legend: {
+                    show: false
+                },
+                grid: {
+                    x: {
+                        show: true
+                    },
+                    y: {
+                        show: true
+                    }
+                }
+            });
+
+            /*var el = dom.replace("#chart-", "");
+            global.charts[el] = stackedBarChart;
+            common.resizesvgcharts(el);*/
+        };
+
+        function drawBrushableStackedBarChart(dom, /*data, options,*/ ordinalVar, numericVar) {
+
+
+            d3.json("api.json", function(data) {
+                var options = {};
+                options.num_top_candidates_filter = 30;
+                options.rotated = true;
+                options.y_axis_tick_format = d3.format('.0s');
+
+                var data = data.data.value.sort(function(a, b) {
+                    return d3.descending(+a.amount, +b.amount);
+                }).slice(0, options.num_top_candidates_filter);
+
+                var brushableStackedBarChart = c3.generate({
+                    padding: {
+                        top: 0,
+                        right: 10,
+                        bottom: 0,
+                        left: 100,
+                    },
+                    size: {
+                        height: 600,
+                        width: 780
+                    },
+                    bindto: dom,
+                    data: {
+                        x: "x-axis",
+                        json: data,
+                        keys: {
+                            x: ordinalVar,
+                            value: numericVar.split(',')
+                        },
+                        groups: [numericVar.split(',')],
+                        type: 'bar',
+                        labels: {
+                            format: function(v, id, i, j) {
+                                try {
+                                    data[i]["candidate_name"];
+                                    return data[i]["candidate_name"];
+                                } catch (error) {
+                                    if (error instanceof TypeError) {
+                                        return true;
+                                    } else {
+                                        console.log(error.message);
+                                    };
+                                }
+                            }
+                        }
+                    },
+                    axis: {
+                        rotated: options.rotated || false,
+                        x: {
+                            label: {
+                                text: ordinalVar.toUpperCase(),
+                                position: options.rotated ? 'outer-middle' : 'outer-center'
+                            },
+                            type: 'category',
+                            tick: {
+                                multiline: true,
+                                multilineMax: 1,
+                            },
+                            height: 50
+                        },
+                        y: {
+                            tick: {
+                                format: options.y_axis_tick_format || '',
+                                count: 5
+                            }
+                        }
+                    },
+                    tooltip: {
+                        format: {
+                            title: function(id) {
+                                return 'Candidate Name: ' + data[id]['candidate_name'];
+                            },
+                            value: function(value, ratio, id) {
+                                return value;
+                            }
+                        }
+                    },
+                    legend: {
+                        show: false
+                    },
+                    grid: {
+                        x: {
+                            show: true
+                        },
+                        y: {
+                            show: true
+                        }
+                    },
+                    subchart: {
+                        show: true
+                    },
+                    zoom: {
+                        enabled: true,
+                        rescale: false,
+                        type: 'scroll',
+                        extent: [0, 10]
+                    },
+                    onrendered: function() {
+                        this.selectChart.selectAll("*[class^=c3-axis][class$=c3-axis-x]")
+                            .style("opacity", 0);
+                    }
+                });
+
+            })
+        };
+
+        /*drawBrushableStackedBarChart('#brushbar', 'candidate_id', 'amount');*/
+
+        function drawGroupedBarChart(dom, data, options, ordinalVar, numericVar) {
+            //options.y_axis_tick_format --> to specify y-axis ticks format
+            //options.rotated --> if true output will be a horizontal bar chart
+            //ordinalVar --> array
+
+
+            var unique = {};
+            var distinct = [];
+            for (var i in data) {
+                if (typeof(unique[data[i][ordinalVar[1]]]) == "undefined") {
+                    distinct.push(data[i][ordinalVar[1]]);
+                }
+                unique[data[i][ordinalVar[1]]] = 0;
+            };
+
+            var data1 = [];
+            for (var i = 0; i < data.length; i++) {
+                var my_object = {};
+                my_object.supplier = data[i][ordinalVar[0]];
+                my_object[data[i][ordinalVar[1]]] = data[i][numericVar];
+                data1.push(my_object);
+            };
+
+
+            var unique_supplier = {};
+            var distinct_supplier = [];
+            for (var i in data1) {
+                if (typeof(unique_supplier[data1[i][ordinalVar[0]]]) == "undefined") {
+                    distinct_supplier.push(data1[i][ordinalVar[0]]);
+                }
+                unique_supplier[data1[i][ordinalVar[0]]] = "0.00";
+            };
+
+            var final_obj = [];
+            for (i = 0; i < distinct_supplier.length; i++) {
+                var uni = data1.filter(function(obj) {
+                    return obj.supplier === distinct_supplier[i]
+                });
+                for (var j = 0; j < uni.length; j++) {
+                    var uni = Object.assign(uni[j], uni[j + 1]);
+                }
+                final_obj.push(uni);
+            }
+
+            for (var i = 0; i < final_obj.length; i++) {
+                for (var j = 0; j < distinct.length; j++) {
+                    if (final_obj[i][distinct[j]] === undefined) {
+                        final_obj[i][distinct[j]] = 0;
+                    }
+                }
+            };
+
+            console.log(final_obj);
+
+            var groupedBarChart = c3.generate({
+        data: {
+            json: final_obj,
+            keys: {
+                x: 'supplier', // it's possible to specify 'x' when category axis
+                value: ['24+ Months', '0 - 6 Months', '6 - 12 Months', '12 - 18 Months', '18 - 24 Months'],
+            }
+        },
+        axis: {
+            x: {
+                type: 'category'
+            }
+        }
+    });
+        }
+
+        drawGroupedBarChart('#brushbar1', data, {
+            'rotated': false
+        }, ['supplier', 'tenture_duration_range'], 'headcount');
+        
+    </script>
+
+    </div>
+
+
+</body>
+
+</html>
