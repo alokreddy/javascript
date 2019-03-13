@@ -1,12 +1,14 @@
 {
-"homepage": "http://alokreddy.github.io/javascript",
+  "homepage": "http://alokreddy.github.io/javascript",
   "name": "resume",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "braces": "^2.3.2",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-scripts": "^2.1.8"
+    "react-scripts": "^2.1.8",
+    "typescript": "^3.3.3333"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -14,10 +16,10 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-  "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
-    "ajv": "^6.5.4",
+    "ajv": "^6.10.0",
     "gh-pages": "^2.0.1",
     "url-parse": "^1.4.3"
   },
