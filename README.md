@@ -1,6 +1,14 @@
-# javascript
-This is a dc.js based sales dashboard.<br />
-datasource: csv file <br />
-libraries used: dc.js, crossfilter, d3.js <br />
+# resumetemplate
+An online resume template in reactjs  
+Instruction to run:-  
+1)Clone the repo  
 
-Goto link: [https://alokreddy.github.io/javascript/](https://alokreddy.github.io/javascript/)
+2)Edit the resumeData.js file in src folder  
+
+3)Generate build using command:  
+ ```npm run build```
+ 
+4)Deploy the build folder to any server of your choice. 
+
+For detailed instructions on how the resume template was created go to post below:  
+[Medium Article](https://medium.com/technoetics/create-a-developer-portfolio-using-reactjs-d34ea1bfb18e)
